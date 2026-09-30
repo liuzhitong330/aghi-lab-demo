@@ -1,0 +1,25 @@
+{
+  "article": "Haddad et al. (2026), Non-lytic viral immunotherapy induces long-term glioblastoma survival and tumor-specific immunity without eliciting an antiviral response",
+  "doi": "10.1038/s41467-026-72746-5",
+  "article_url": "https://www.nature.com/articles/s41467-026-72746-5",
+  "source_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-72746-5/MediaObjects/41467_2026_72746_MOESM4_ESM.xlsx",
+  "source_filename": "41467_2026_72746_MOESM4_ESM.xlsx",
+  "sha256": "3e302d90157981d46c04b72bc94633ad2fdf55381f016a33455d3986f35589e6",
+  "source_license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "source_bytes": 268813,
+  "source_sheets": [
+    "Figure 6B",
+    "Figure 6C-G"
+  ],
+  "accessed": "2026-09-30",
+  "biological_unit": "mouse within one figure; no cross-sheet animal identifiers",
+  "code_origin": "New independent descriptive analysis; the source publication states that no custom code was developed or used.",
+  "figure_legend_facts": [
+    "Figure 6 survival compares PBS+Vehicle (10), PBS+TMZ (9), RRV-RLI+Vehicle (9), RRV-RLI+TMZ (9).",
+    "The Figure 6 legend identifies seven combination-group non-tumor endpoints as TMZ toxicity; the vehicle-group non-tumor endpoint cause is not assigned here.",
+    "Figure 6D-G represents individual mouse bioluminescent trajectories; time is days after tumor implantation.",
+    "The workbook labels radiance ph/sec/ROI; no conversion to tumor size or cell number is performed.",
+    "Pretreatment BLI was used for treatment-group randomization; the workbook supplies no raw imaging files or camera metadata."
+  ]
+}

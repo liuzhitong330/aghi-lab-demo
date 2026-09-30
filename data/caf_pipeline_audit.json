@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "scope": "Static source-code audit of the JCI 2023 CAF culture-image workflow; separate from the Nature Communications 2026 mouse survival/BLI analysis.",
+  "repository": "https://github.com/alexanderchang1/GBM_CAF_open",
+  "commit": "7f252ef0f73cff182aee6962fde4765769871f2f",
+  "upstream_license": "GNU General Public License v3.0",
+  "upstream_code_executed": false,
+  "classifier_reproduced": false,
+  "tracked_file_count": 9,
+  "tracked_files": [
+    "DAPI_CYT_SPLIT.ijm",
+    "GroupedSegmentation.cppipe",
+    "JCI_review_train_test.py",
+    "LICENSE",
+    "README.md",
+    "clear_trash.py",
+    "clear_trash_segments.py",
+    "dist_loc_files.py",
+    "train_test.py"
+  ],
+  "reviewed_files": [
+    {
+      "file": "README.md",
+      "bytes": 10902,
+      "sha256": "1633e4f6a7ef713467c25bca860decd0b67383874b4b9ee6184a9cb1810a020e",
+      "url": "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/README.md"
+    },
+    {
+      "file": "JCI_review_train_test.py",
+      "bytes": 8362,
+      "sha256": "4a05eebb067cfb83aa0e3698a068157a54ae1eb30af3a60abd45d7188378b911",
+      "url": "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py"
+    },
+    {
+      "file": "train_test.py",
+      "bytes": 11500,
+      "sha256": "1ce94eb3774bda7b38b10237e65a8459428994d94b9033f057bea3943ff45295",
+      "url": "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/train_test.py"
+    },
+    {
+      "file": "GroupedSegmentation.cppipe",
+      "bytes": 15230,
+      "sha256": "f15552a297e7d4f551858019add51847a9b9fafd22c4557d48407bca3ce8eb98",
+      "url": "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/GroupedSegmentation.cppipe"
+    },
+    {
+      "file": "LICENSE",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "url": "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/LICENSE"
+    }
+  ],
+  "available_input_data_files": [],
+  "split": {
+    "unit_supplied_to_function": "feature row",
+    "train_fraction": 0.7,
+    "stratification": "class label y",
+    "random_state": 0,
+    "explicit_group_argument": false,
+    "source_line": 97
+  },
+  "dropna_call_lines": [
+    43,
+    57,
+    74,
+    172,
+    190,
+    211,
+    222
+  ],
+  "findings": [
+    {
+      "id": "split_unit",
+      "title": "Record the biological split unit",
+      "observation": "The review script partitions pooled feature rows with a stratified 70/30 split. The call supplies no donor, culture, or image grouping key.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L97"
+      ],
+      "next_action": "Retain biological_unit_id and image_pair_id, then assess held-out biological units where independent units are available.",
+      "limit": "This is not proof that related images crossed the split. The missing source tables prevent checking row provenance or estimating held-out performance."
+    },
+    {
+      "id": "complete_case",
+      "title": "Retain exclusions before dropping incomplete rows",
+      "observation": "The review script contains 7 active dropna calls. It prints some post-filter counts but does not return a row-level exclusion ledger.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L43",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L57",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L74",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L172",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L190",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L211",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L222"
+      ],
+      "next_action": "Keep qc_exclusion_reason for each original object and report retained/total counts by biological unit and condition.",
+      "limit": "No claim is made about the number, balance, or consequences of exclusions in the original experiment."
+    },
+    {
+      "id": "pairing",
+      "title": "Check nuclear and cytoplasmic object identity",
+      "observation": "The pairing function uses filename and rounded centroid matches, then Parent_Nuclei, to match nuclear and cytoplasmic features.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/train_test.py#L272-L318"
+      ],
+      "next_action": "Require exactly one parent match for each object within its image pair and segmentation method; preserve unmatched or ambiguous objects in the QC ledger.",
+      "limit": "The audit does not establish that any pair was misassigned. That requires the original CellProfiler and VAMPIRE tables."
+    },
+    {
+      "id": "image_matching",
+      "title": "Verify channel-pair identity before segmentation",
+      "observation": "The supplied CellProfiler pipeline disables metadata extraction and matches image sets by order. It includes both propagation and watershed segmentation branches.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/GroupedSegmentation.cppipe#L14",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/GroupedSegmentation.cppipe#L35",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/GroupedSegmentation.cppipe#L102",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/GroupedSegmentation.cppipe#L131"
+      ],
+      "next_action": "Store image_pair_id and segmentation method explicitly. Check DAPI/cytoplasm pairs rather than relying only on directory order.",
+      "limit": "The original images are absent, so this is a preflight requirement for future use, not a measured pairing failure."
+    },
+    {
+      "id": "validation_labels",
+      "title": "Separate held-out evaluation from descriptive projections",
+      "observation": "The script reports held-out X_test performance, separate projections to named cell lines and cultures, and an 'Internal Validation' section drawn from pooled sum_data.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L126-L135",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L232-L241"
+      ],
+      "next_action": "Label test-set metrics, external-line projections, and pooled-data summaries separately in any future report.",
+      "limit": "The pooled-data section includes training rows; it is not a second independent validation cohort. No original accuracy is reproduced here."
+    },
+    {
+      "id": "inputs",
+      "title": "Request source measurements before reproducing prediction",
+      "observation": "The pinned tree has 9 tracked files and no tabular input, image, or fitted-model file with the inspected data extensions. The review script expects a local input directory.",
+      "evidence": [
+        "https://github.com/alexanderchang1/GBM_CAF_open/tree/7f252ef0f73cff182aee6962fde4765769871f2f",
+        "https://github.com/alexanderchang1/GBM_CAF_open/blob/7f252ef0f73cff182aee6962fde4765769871f2f/JCI_review_train_test.py#L36-L40"
+      ],
+      "next_action": "Request de-identified image/object features, biological-unit annotations, and the exact analysis environment before claiming reproducibility.",
+      "limit": "This statement concerns this pinned repository tree only, not all data the authors may hold or publish elsewhere."
+    }
+  ],
+  "minimum_future_metadata": [
+    {
+      "field": "biological_unit_id",
+      "purpose": "Link donor/culture/batch provenance and define independent validation groups."
+    },
+    {
+      "field": "image_pair_id",
+      "purpose": "Join the matching nuclear/cytoplasm images and keep all objects from the same pair together."
+    },
+    {
+      "field": "qc_exclusion_reason",
+      "purpose": "Retain why an original object was excluded or not successfully paired; blank only for reviewed retained objects."
+    }
+  ],
+  "claims_not_supported": [
+    "CAF identity or purity",
+    "new classifier accuracy",
+    "independent donor-level generalization",
+    "any measured mispairing or data leakage",
+    "a relationship between these culture images and the Nature 2026 BLI cohort"
+  ]
+}

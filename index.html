@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A reproducible audit of tumor imaging denominators and endpoint sensitivity using Aghi Lab public source data.">
+  <title>Exploratory Analyses Inspired by the Aghi Lab</title>
+  <link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+  <main class="page">
+    <h1>Exploratory Analyses Inspired by the Aghi Lab</h1>
+    <div class="byline">
+      Cathy Liu · Experimental &amp; computational biology · <a href="mailto:cathyliu014@gmail.com">cathyliu014@gmail.com</a><br>
+      Prepared for the Aghi Lab, UCSF<br>
+      Personal exploratory project, September 2026
+    </div>
+    <nav class="section-nav" aria-label="Demo sections">
+      <a href="#motivation">Motivation</a><a href="#a1">Imaging review</a><a href="#a2">Endpoint sensitivity</a><a href="#relevance">Relevance</a>
+    </nav>
+    <p>The Aghi Lab studies how the brain-tumor microenvironment shapes treatment response. Its recent non-lytic viral immunotherapy study made me think about a practical question: when a tumor signal falls, how do we distinguish a treatment response from a change in which animals remain under observation?</p>
+    <p>I built a small review tool over the study’s public animal-level records. It keeps missing imaging measurements visible, tests how non-tumor endpoints affect interpretation, and turns those checks into a recording plan for the next cohort.</p>
+    <hr id="motivation">
+    <section aria-labelledby="how-heading">
+      <h2 id="how-heading">How it works</h2>
+      <p>Figure 6 of <a href="https://www.nature.com/articles/s41467-026-72746-5">Haddad et al. (2026)</a> compares PBS or RRV-RLI, with vehicle or temozolomide (TMZ), in a mouse glioblastoma model. RLI is a receptor-linked IL-15 fusion protein; RRV-RLI is its retroviral delivery treatment. Each imaging trace is one anonymous source-column series; each endpoint record is one animal.</p>
+      <p>These are separate views, not matched animals: the public workbook does not provide an identifier linking the two sheets. All results below are descriptive reanalyses, not new experimental findings or treatment recommendations.</p>
+    </section>
+    <hr id="a1">
+    <section aria-labelledby="analysis-one-heading">
+      <h2 id="analysis-one-heading">Analysis 1 — Keep the denominator in view</h2>
+      <div class="experiment">
+        <div class="exp-label">Measurement review</div><div class="exp-title">A smaller signal needs an observation record</div>
+        <p>Select a treatment and day. Thin traces show individual bioluminescence measurements relative to that series’ day-3 baseline; the thick line is the median among observed series at each day. A missing value is never a zero.</p>
+      </div>
+      <div class="panel">
+        <div class="controls"><label>Treatment group<select id="bli-group"></select></label><label>Review day<select id="bli-day"></select></label></div>
+        <svg id="hero-viz" class="viz" viewBox="0 0 600 320" role="img" aria-label="Baseline-normalized tumor bioluminescence trajectories"></svg>
+        <div class="readout" id="bli-readout" aria-live="polite">Loading source records…</div>
+        <figcaption>Figure 6C–G source data. Day-3-normalized BLI; logarithmic vertical axis. Source unit: “Tumor radiance (ph/sec/ROI)”. Within-sheet column labels are not biological animal IDs.</figcaption>
+        <details><summary>Inspect this day’s source records</summary><div class="table-scroll"><table id="bli-table"><caption>Selected-day measurement review</caption><thead><tr><th scope="col">Source column</th><th scope="col">BLI (ph/sec/ROI)</th><th scope="col">Fold</th><th scope="col">Source status</th></tr></thead><tbody></tbody></table></div></details>
+        <button class="quiet-button" id="export-review" type="button">Download selected-day review CSV</button>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><span class="metric-val" id="metric-one">—</span><span class="metric-desc">observed / baseline series</span></div>
+        <div class="metric"><span class="metric-val" id="metric-two">—</span><span class="metric-desc">median fold among observed</span></div>
+        <div class="metric"><span class="metric-val" id="metric-three">—</span><span class="metric-desc">records needing missing-status review</span></div>
+      </div>
+      <p class="value-note"><strong>What this lets the lab do:</strong> locate the exact measurements needing reconciliation before interpreting a response curve. <strong>Where Cathy adds value:</strong> connect quantitative QC to mouse-model records, rather than letting an average conceal a changing cohort.</p>
+    </section>
+    <hr id="a2">
+    <section aria-labelledby="analysis-two-heading">
+      <h2 id="analysis-two-heading">Analysis 2 — Ask which endpoint the curve describes</h2>
+      <div class="experiment">
+        <div class="exp-label">Sensitivity analysis</div><div class="exp-title">Tumor-associated benefit and other endpoints are different questions</div>
+        <p>The source distinguishes endpoints (<code>1</code>), end-of-study censoring (<code>0</code>) and non-tumor endpoints (<code>0*</code>). The paper attributes seven non-tumor endpoints in the RRV-RLI + TMZ group to toxicity. Censoring them and counting them answer different questions.</p>
+      </div>
+      <div class="panel">
+        <div class="controls">
+          <label>Endpoint group<select id="survival-group"></select></label><label>Follow-up horizon<select id="horizon"></select></label>
+          <label class="full-control">Event definition<select id="endpoint-mode"><option value="paper_compatible">Paper-compatible: 0* is censored</option><option value="composite_endpoint">Composite: 0* also counts as an endpoint</option></select></label>
+        </div>
+        <svg id="endpoint-viz" class="viz" viewBox="0 0 600 320" role="img" aria-label="Endpoint-definition sensitivity curves"></svg>
+        <div class="readout" id="endpoint-readout" aria-live="polite">Loading endpoint records…</div>
+        <figcaption>Solid: selected definition. Dashed: alternative. Crosses: censoring. Restricted mean event-free time is the area under each Kaplan–Meier curve to the selected horizon, not mean lifespan.</figcaption>
+        <div class="table-scroll"><table id="endpoint-summary"><caption>Both definitions at the same horizon</caption><thead><tr><th scope="col">Group</th><th scope="col">Paper-compatible days</th><th scope="col">Composite days</th><th scope="col">Difference</th></tr></thead><tbody></tbody></table></div>
+        <details><summary>Inspect endpoint records for this group</summary><div class="table-scroll"><table id="endpoint-records"><caption>Unlinked animal endpoint records</caption><thead><tr><th scope="col">Source row</th><th scope="col">Day</th><th scope="col">Code</th><th scope="col">Meaning</th></tr></thead><tbody></tbody></table></div></details>
+      </div>
+      <p class="value-note"><strong>What this lets the lab do:</strong> separate evidence about tumor endpoints from a composite outcome that also retains non-tumor endpoints. <strong>Where Cathy adds value:</strong> make the analysis choice explicit before planning an experiment or writing up a survival result.</p>
+      <p>The composite is a sensitivity analysis, <em>not</em> an estimate of all-cause mortality. The workbook does not establish causes for every endpoint. Neither curve resolves informative censoring, and small groups do not support a treatment ranking by themselves. The 60-day default belongs to this exploratory tool, not a prespecified endpoint of the publication.</p>
+    </section>
+    <hr id="relevance">
+    <section aria-labelledby="relevance-heading">
+      <h2 id="relevance-heading">Why this matters for the lab</h2>
+      <p>A useful next step would be to preserve a stable animal ID across imaging, endpoint adjudication and tissue measurements. If reduced bioluminescence agrees with independently assessed tumor burden while tolerability remains acceptable, confidence in the tumor response increases. If those measurements diverge, the priority becomes reconciling the assay and endpoint—not declaring a stronger response.</p>
+      <p>This is a proposed follow-up, not a claim about the lab’s internal plans. It would require matched controls, a prespecified imaging schedule, blinded measurement review and lab-approved endpoint definitions. <a href="data/next-cohort-schema.csv" download>Download a next-cohort recording schema</a>; the current anonymous sheets cannot supply those missing links.</p>
+      <details class="code-audit"><summary>A separate culture-imaging check from the team’s GitHub</summary>
+        <p>I also fetched the CAF study’s <a href="https://github.com/alexanderchang1/GBM_CAF_open/tree/7f252ef0f73cff182aee6962fde4765769871f2f">published image-analysis repository</a> and derived a static QC audit from its code. This is a different experiment, not code for the viral-therapy study.</p>
+        <div id="caf-audit" class="readout">The audit checks image/object identity and the unit used for train/test splitting.</div>
+        <p>For the next cultured-cell image set, retain acquisition-field identity, nucleus-to-cell parent IDs and donor/batch labels. The repository’s row-level split cannot, on its own, establish donor-held-out performance. That is a validation question, not evidence that leakage occurred.</p>
+        <p><a href="data/caf_pipeline_audit.json">Code-derived audit output</a> · <a href="scripts/audit_caf_pipeline.py">Reproducible static audit</a>. No upstream classifier was executed; its raw input images and tables were not present in the fetched repository.</p>
+      </details>
+      <h2>What I would bring</h2>
+      <p>My experience combines computational research with mouse tumor models, tissue sectioning and immunostaining. I would bring that perspective to keeping experimental records interpretable, checking measurements against their biological context and designing the next discriminating comparison. This assistant-assisted exploratory project does not establish experience in primary tumor/stem-cell culture or retroviral production.</p>
+      <h2>Methods note</h2>
+      <p class="methods-note">Primary data: <a href="https://www.nature.com/articles/s41467-026-72746-5">Haddad et al., Nature Communications (2026)</a>, <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41467-026-72746-5/MediaObjects/41467_2026_72746_MOESM4_ESM.xlsx">Source Data workbook</a>, Fig6B and Fig6C–G (CC BY 4.0). Derived values are this project’s reanalysis, not author-endorsed results. Day-3 normalization is within each BLI column. No imputation, model fitting, hypothesis-test claims or cross-sheet animal matching. Tail estimates can depend on very few animals.</p>
+      <p class="methods-note">Textual missing annotations are retained verbatim. BLI is an imaging signal, not a direct cell count; source data alone cannot verify ROI placement or acquisition settings. Kaplan–Meier estimates assume non-informative censoring; toxicity-related censoring challenges that interpretation.</p>
+      <p class="methods-note"><a href="README.md">Reproduce the analysis</a> · <a href="data/data.json">All derived data</a> · <a href="scripts/build_data.py">Extraction and statistics</a> · <a href="https://github.com/liuzhitong330/aghi-lab-demo">Public repository</a>. No affiliation with or endorsement by UCSF or the authors. Research demonstration only.</p>
+    </section>
+    <footer>Cathy Liu · <a href="mailto:cathyliu014@gmail.com">cathyliu014@gmail.com</a> · <a href="tel:+14152163799">415-216-3799</a><br>Public-data reanalysis · Reproducible, exploratory, not experimentally validated</footer>
+  </main>
+  <script src="data.js?v=1"></script><script src="app.js?v=1"></script>
+</body>
+</html>

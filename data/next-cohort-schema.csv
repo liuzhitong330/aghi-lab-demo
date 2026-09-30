@@ -1,0 +1,1 @@
+animal_id,cohort,treatment,measurement_day,bli_photons_per_second_per_ROI,baseline_day,missing_reason,endpoint_day,endpoint_type,exclusion_reason,acquisition_batch,tissue_sample_id

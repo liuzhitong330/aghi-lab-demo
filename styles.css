@@ -1,0 +1,71 @@
+:root { --ink:#1a1a1a; --muted:#666; --rule:#ddd; --panel:#fcfcfc; --accent:#1f7a8c; --secondary:#c07a2a; }
+*, *::before, *::after { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; padding:0 1rem; color:var(--ink); background:#fff; font-family:Georgia, "Times New Roman", serif; font-size:18px; line-height:1.65; }
+.page { max-width:680px; margin:0 auto; padding:3rem 0 5rem; }
+h1 { margin:0 0 .4rem; font-size:1.5rem; line-height:1.25; }
+h2 { margin:2.4rem 0 .5rem; font-size:1.1rem; line-height:1.3; }
+p { margin:0 0 1rem; }
+a { color:inherit; text-underline-offset:3px; }
+.byline, .section-nav, .exp-label, .metric-row, figcaption, .searchbar, .chips, .readout, .comparison, footer { font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.byline { margin-bottom:2.4rem; color:#555; font-size:.9rem; line-height:1.6; }
+.section-nav { display:flex; flex-wrap:wrap; gap:.45rem 1rem; margin-bottom:2.4rem; font-size:.82rem; }
+.section-nav a { color:#555; text-decoration:none; }
+.opening { font-size:1.05rem; }
+hr { margin:2.4rem 0; border:0; border-top:1px solid var(--rule); }
+.experiment { margin:1.5rem 0; padding-left:1.2rem; border-left:3px solid var(--ink); }
+.experiment p { margin-top:.6rem; font-size:.92rem; }
+.exp-label, .label-inline { color:#777; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; }
+.exp-title { margin-bottom:.6rem; font-size:1rem; font-weight:700; }
+.panel { margin:1rem 0; padding:1rem 1.1rem; border:1px solid #e0e0e0; border-radius:3px; background:var(--panel); }
+.searchbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:.6rem; }
+.searchbar input { flex:1 1 220px; min-width:0; padding:9px 13px; border:1px solid #bcc6d0; border-radius:5px; background:#fff; font:inherit; font-size:.95rem; }
+.searchbar input:focus { border-color:var(--accent); outline:2px solid var(--accent); }
+.searchbar button { padding:9px 16px; border:0; border-radius:5px; color:#fff; background:var(--accent); font:inherit; font-size:.88rem; cursor:pointer; }
+.searchbar button:focus-visible, .chips button:focus-visible, .comparison button:focus-visible, a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.chips { display:flex; flex-wrap:wrap; gap:.2rem .6rem; margin-bottom:.4rem; color:#777; font-size:.78rem; }
+.chips button { padding:0; border:0; border-bottom:1px dotted; color:var(--accent); background:none; font:inherit; cursor:pointer; }
+.viz { display:block; width:100%; max-width:600px; margin:0 auto; }
+.readout { margin-top:.7rem; padding:.65rem .9rem; border-radius:4px; background:#e6f1f3; font-size:.86rem; line-height:1.5; }
+.readout strong { color:var(--accent); }
+figcaption { margin-top:.6rem; color:#777; font-size:.78rem; line-height:1.45; }
+.metric-row { display:flex; flex-wrap:wrap; gap:2rem; margin:1rem 0; }
+.metric { display:flex; flex-direction:column; }
+.metric-val { font-size:1.4rem; font-weight:700; line-height:1; }
+.metric-desc { margin-top:.15rem; color:var(--muted); font-size:.8rem; }
+.label-inline { display:block; margin:.4rem 0 .8rem; }
+.comparison { display:grid; gap:.35rem; }
+.comparison button { display:grid; grid-template-columns:90px 1fr 90px; gap:.7rem; align-items:center; width:100%; padding:.35rem 0; border:0; background:none; color:#444; font:inherit; font-size:.78rem; text-align:left; cursor:pointer; }
+.comparison-track { height:14px; background:#e9eff0; }
+.comparison-fill { display:block; height:100%; background:var(--accent); }
+.methods-note { color:#444; font-size:.9rem; }
+footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid #eee; color:#777; font-size:.82rem; line-height:1.6; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media (max-width:540px) { body{font-size:17px;} .page{padding-top:2rem;} .metric-row{gap:1.2rem;} .comparison button{grid-template-columns:70px 1fr 72px;} }
+@media (prefers-reduced-motion:reduce) { html{scroll-behavior:auto;} }
+
+/* Target-specific controls; the Ramani base remains unchanged. */
+.controls { display:flex; flex-wrap:wrap; gap:.8rem 1rem; margin-bottom:1rem; font-family:system-ui,sans-serif; font-size:.8rem; }
+.controls label { display:flex; flex-direction:column; flex:1 1 210px; gap:.25rem; }
+.controls select { width:100%; min-height:42px; padding:.5rem; border:1px solid #bbb; background:white; color:var(--ink); font:inherit; border-radius:2px; }
+.controls select:focus-visible, button:focus-visible, summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.full-control { flex-basis:100% !important; }
+.quiet-button { min-height:42px; margin-top:.9rem; padding:.4rem .65rem; font:.8rem system-ui,sans-serif; background:white; border:1px solid #bbb; color:var(--ink); cursor:pointer; }
+.table-scroll { width:100%; overflow-x:auto; margin:.6rem 0; }
+table { border-collapse:collapse; width:100%; font:.76rem/1.5 system-ui,sans-serif; font-variant-numeric:tabular-nums; }
+th, td { text-align:left; padding:.5rem .35rem; border-bottom:1px solid #ddd; vertical-align:top; }
+th { font-weight:600; }
+caption { text-align:left; color:#666; font-size:.75rem; padding:.35rem 0; }
+details { margin:1rem 0; font-size:.9rem; }
+summary { cursor:pointer; font-family:system-ui,sans-serif; font-size:.8rem; }
+details p { margin-top:.8rem; }
+.value-note { font-size:.9rem; }
+.value-note strong { font-weight:normal; font-style:italic; }
+.viz text { font-family:system-ui,sans-serif; fill:#555; font-size:11px; }
+.viz .axis { stroke:#bbb; stroke-width:1; }
+.viz .grid { stroke:#e4e4e4; stroke-width:1; }
+.viz .individual { stroke:#999; stroke-width:1; opacity:.65; fill:none; }
+.viz .main-line { stroke:var(--accent); stroke-width:2.4; fill:none; }
+.viz .alternative { stroke:#555; stroke-width:1.8; stroke-dasharray:6 4; fill:none; }
+code { font-size:.83em; }
+@media (max-width:540px) { .controls label { flex-basis:100%; } .panel { padding:.8rem; } .viz text { font-size:12px; } table { font-size:.7rem; } }
