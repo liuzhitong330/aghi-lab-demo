@@ -46,10 +46,10 @@
       const lo = Math.floor(Math.min(0, ...values)), hi = Math.ceil(Math.max(0,...values));
       const x = t=>58+(t-3)/23*516, y = v=>260-(Math.log10(v)-lo)/(hi-lo)*228;
       label(svg,58,18, 'BLI / day-3 baseline (log scale)');
-      for(let p=lo;p<=hi;p++) {line(svg,58,y(10**p),574,y(10**p),'grid');label(svg,48,y(10**p)+4,10**p<1?String(10**p):`${(10**p).toLocaleString()}×`,{'text-anchor':'end'});}
+      for(let p=lo;p<=hi;p++) {line(svg,58,y(10**p),574,y(10**p),'grid');label(svg,48,y(10**p)+4,p===3?'10³×':`${10**p}×`,{'text-anchor':'end'});}
       line(svg,58,32,58,260,'axis'); line(svg,58,260,574,260,'axis');
       data.bli.times.forEach(t=>{label(svg,x(t),282,String(t),{'text-anchor':'middle'});const s=summaries.find(s=>s.time===t);label(svg,x(t),300,`n=${s.observed_n}`,{'text-anchor':'middle'});});
-      label(svg,316,318,'Days after implantation · observed denominator below',{'text-anchor':'middle'});
+      label(svg,316,318,'Days after implantation · n observed',{'text-anchor':'middle'});
       line(svg,x(day),32,x(day),260,'axis');
       for(const s of series) {
         let path='', active=false;
@@ -89,7 +89,7 @@
       [0,.25,.5,.75,1].forEach(s=>{line(svg,58,y(s),574,y(s),'grid');label(svg,48,y(s)+4,`${s*100}%`,{'text-anchor':'end'});});
       line(svg,58,37,58,255,'axis');line(svg,58,255,574,255,'axis');
       [0,.25,.5,.75,1].forEach(f=>{const t=tau*f;label(svg,x(t),278,fmt(t,t%1?1:0),{'text-anchor':'middle'});const n=records.filter(r=>r.time>=t).length;label(svg,x(t),296,`n=${n}`,{'text-anchor':'middle'});});
-      label(svg,316,315,'Days after implantation · risk set before time below',{'text-anchor':'middle'});
+      label(svg,316,315,'Days after implantation · n at risk before time',{'text-anchor':'middle'});
       for(const m of [alternative,mode]) {
         const points=data.survival.modes[m].curves[group];
         let path=`M${x(0)},${y(1)}`,s=1;

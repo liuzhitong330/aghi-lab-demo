@@ -68,4 +68,4 @@ details p { margin-top:.8rem; }
 .viz .main-line { stroke:var(--accent); stroke-width:2.4; fill:none; }
 .viz .alternative { stroke:#555; stroke-width:1.8; stroke-dasharray:6 4; fill:none; }
 code { font-size:.83em; }
-@media (max-width:540px) { .controls label { flex-basis:100%; } .panel { padding:.8rem; } .viz text { font-size:12px; } table { font-size:.7rem; } }
+@media (max-width:540px) { .controls label { flex-basis:100%; } .panel { padding:.8rem; } .viz text { font-size:18px; } table { font-size:.7rem; } }
